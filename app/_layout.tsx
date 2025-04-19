@@ -12,6 +12,7 @@ export default function Layout() {
         headerTitleStyle: {
           fontWeight: 'bold',
         },
+        
         // Replace the default title with a custom Text component
         headerTitle: () => (
           <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 18, textAlign: 'center' }}>

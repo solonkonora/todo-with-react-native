@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { View, TextInput, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import { Text } from 'react-native'
-import axios from 'axios';
+import { View, TextInput, StyleSheet, Alert, TouchableOpacity, Text, Platform } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../app';
@@ -20,11 +18,39 @@ const AddTaskScreen: React.FC<Props> = ({ navigation }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
 
+  // Use platform-specific API URL (10.0.2.2 for Android emulator)
+  const API_BASE_URL = Platform.OS === 'android' ? 'http://192.168.1.36:3000/api/todos' : 'http://localhost:3000/api/todos';
+
   const handleAddTask = async () => {
-    await axios.post('http://localhost:3000/todos', { title, description });
-    Alert.alert('Task Added', `Title: ${title}\nDescription: ${description}`);
-    navigation.goBack();
+    try {
+      const response = await fetch(`${API_BASE_URL}/todos`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, description }),
+      });
+  
+      console.log('Status:', response.status);
+      const text = await response.text();
+      console.log('Response text:', text);
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}, message: ${text}`);
+      }
+  
+      const data = JSON.parse(text); // or response.json() if you expect JSON
+      Alert.alert('Task Added', `Title: ${title}\nDescription: ${description}`);
+      navigation.goBack();
+    } catch (error) {
+      console.error('Fetch error:', error);
+    
+      if (error instanceof Error) {
+        Alert.alert('Error', error.message);
+      } else {
+        Alert.alert('Error', 'An unknown error occurred');
+      }
+    }
   };
+  
 
   return (
     <View style={styles.container}>
