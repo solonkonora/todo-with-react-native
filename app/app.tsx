@@ -3,21 +3,15 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screens/home-screen';
 import AddTaskScreen from './screens/add-task';
 
-// Define the parameter list for the stack
-export type RootStackParamList = {
-  'Home': undefined; // No parameters for Home
-  'Add Task': undefined; // No parameters for Add Task
-};
+import type { RootStackParamList, todoProps } from '../nav-types/types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
-const App = () => {
+export default function App() {
   return (
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Add Task" component={AddTaskScreen} />
       </Stack.Navigator>
   );
-};
-
-export default App;
+}

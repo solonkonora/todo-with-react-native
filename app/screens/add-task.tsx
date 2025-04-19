@@ -1,48 +1,47 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Alert, TouchableOpacity, Text, Platform } from 'react-native';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { RouteProp } from '@react-navigation/native';
-import { RootStackParamList } from '../app';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList, todoProps } from '../../nav-types/types'; // Adjust path
 
-type AddTaskScreenNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  'Add Task'
->;
+type AddTaskScreenProps = NativeStackScreenProps<RootStackParamList, 'Add Task'>;
 
-type Props = {
-  navigation: AddTaskScreenNavigationProp;
-  route: RouteProp<any, any>; // Optional if you need route params
-};
+const AddTaskScreen: React.FC<AddTaskScreenProps> = ({ route, navigation }) => {
+  const todo = route.params?.todo;
 
-const AddTaskScreen: React.FC<Props> = ({ navigation }) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
+  const [title, setTitle] = useState(todo?.title ?? '');
+  const [description, setDescription] = useState(todo?.description ?? '');
 
-  // Use platform-specific API URL (10.0.2.2 for Android emulator)
-  const API_BASE_URL = Platform.OS === 'android' ? 'http://192.168.1.36:3000/api/todos' : 'http://localhost:3000/api/todos';
+  const API_BASE_URL =
+    Platform.OS === 'android'
+      ? 'http://192.168.1.36:3000/api/todos'
+      : 'http://localhost:3000/api/todos';
 
-  const handleAddTask = async () => {
+  const handleSubmit = async () => {
+    if (!title.trim()) {
+      Alert.alert('Validation Error', 'Please enter a title');
+      return;
+    }
+
     try {
-      const response = await fetch(`${API_BASE_URL}/todos`, {
-        method: 'POST',
+      const method = todo ? 'PUT' : 'POST';
+      const url = todo ? `${API_BASE_URL}/${todo._id}` : API_BASE_URL;
+
+      const response = await fetch(url, {
+        method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, description }),
       });
-  
-      console.log('Status:', response.status);
-      const text = await response.text();
-      console.log('Response text:', text);
-  
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}, message: ${text}`);
+        const errorText = await response.text();
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
       }
-  
-      const data = JSON.parse(text); // or response.json() if you expect JSON
-      Alert.alert('Task Added', `Title: ${title}\nDescription: ${description}`);
+
+      Alert.alert(todo ? 'Task Updated' : 'Task Added', `Title: ${title}\nDescription: ${description}`);
+
       navigation.goBack();
     } catch (error) {
       console.error('Fetch error:', error);
-    
       if (error instanceof Error) {
         Alert.alert('Error', error.message);
       } else {
@@ -50,57 +49,30 @@ const AddTaskScreen: React.FC<Props> = ({ navigation }) => {
       }
     }
   };
-  
 
   return (
     <View style={styles.container}>
+      <TextInput style={styles.input} placeholder="Todo Title" value={title} onChangeText={setTitle} autoFocus />
       <TextInput
-        style={styles.input}
-        placeholder="Todo Title"
-        value={title}
-        onChangeText={setTitle}
-      />
-      <TextInput
-        style={styles.input}
+        style={[styles.input, styles.descriptionInput]}
         placeholder="Description"
         value={description}
         onChangeText={setDescription}
         multiline
       />
-      <TouchableOpacity style={styles.button} onPress={handleAddTask} activeOpacity={0.7}>
-        <Text style={styles.buttonText}>ADD</Text>
+      <TouchableOpacity style={styles.button} onPress={handleSubmit} activeOpacity={0.7}>
+        <Text style={styles.buttonText}>{todo ? 'UPDATE' : 'ADD'}</Text>
       </TouchableOpacity>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: 'white',
-  },
-  input: {
-    height: 40,
-    borderColor: 'gray',
-    borderWidth: 1,
-    marginBottom: 20,
-    paddingLeft: 10,
-    borderRadius: 5,
-  },
-  button: {
-    backgroundColor: '#4295c8',
-    borderRadius: 5,
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    marginTop: 10,
-  },
-  buttonText: {
-    color: 'white',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
+  container: { flex: 1, padding: 20, backgroundColor: 'white' },
+  input: { borderColor: 'gray', borderWidth: 1, marginBottom: 20, paddingLeft: 10, borderRadius: 5, fontSize: 16 },
+  descriptionInput: { height: 80, textAlignVertical: 'top' },
+  button: { backgroundColor: '#4295c8', borderRadius: 5, paddingVertical: 12, paddingHorizontal: 20, alignItems: 'center', marginTop: 10 },
+  buttonText: { color: 'white', fontWeight: 'bold', fontSize: 16 },
 });
 
 export default AddTaskScreen;

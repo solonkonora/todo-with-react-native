@@ -1,18 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, Button, StyleSheet, TouchableOpacity, Platform } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-type todoProps = {
-  _id: string;
-  title: string;
-  description: string;
-};
-
-type RootStackParamList = {
-  Home: undefined;
-  'Add Task': undefined;
-};
+import { RootStackParamList, todoProps } from '../../nav-types/types'; // Adjust path
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
@@ -31,16 +22,14 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       console.error('Fetch error:', error);
     }
   };
-  
+
   useEffect(() => {
     fetchTodos();
   }, []);
 
   const handleDelete = async (id: string) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/todos/${id}`, {
-        method: 'DELETE',
-      });
+      const response = await fetch(`${API_BASE_URL}/api/todos/${id}`, { method: 'DELETE' });
       if (!response.ok) throw new Error('Failed to delete');
       fetchTodos();
     } catch (error) {
@@ -48,19 +37,8 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
     }
   };
 
-
-
-  
-  const handleEdit = async (id: string) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/todos/${id}`, {
-        method: 'EDIT',
-      });
-      if (!response.ok) throw new Error('Failed to delete');
-      fetchTodos();
-    } catch (error) {
-      console.error('Delete error:', error);
-    }
+  const handleEdit = (todo: todoProps) => {
+    navigation.navigate('Add Task', { todo });
   };
 
   return (
@@ -71,23 +49,26 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View style={styles.task}>
-            <Text style={styles.taskTitle}>{item.title}</Text>
-            <Text>{item.description}</Text>
+            <View style={styles.taskInfo}>
+              <Text style={styles.taskTitle}>{item.title}</Text>
+              <Text>{item.description}</Text>
+            </View>
 
             <View style={styles.iconRow}>
-        <TouchableOpacity onPress={() => handleEdit(item._id)} style={styles.iconButton}>
-          <MaterialIcons name="edit" size={24} color="#4295c8" />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => handleDelete(item._id)} style={styles.iconButton}>
-          <MaterialIcons name="delete" size={24} color="#c44242" />
-        </TouchableOpacity>
-      </View>
+              <TouchableOpacity onPress={() => handleEdit(item)} style={styles.iconButton}>
+                <MaterialIcons name="edit" size={24} color="#4295c8" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => handleDelete(item._id)} style={styles.iconButton}>
+                <MaterialIcons name="delete" size={24} color="#c44242" />
+              </TouchableOpacity>
+            </View>
           </View>
         )}
       />
+
       <TouchableOpacity
         style={styles.button}
-        onPress={() => navigation.navigate('Add Task')}
+        onPress={() => navigation.navigate('Add Task', {})}
         activeOpacity={0.7}
       >
         <Text style={styles.buttonText}>Add Task</Text>
@@ -97,10 +78,23 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: 'white' },
+  container: { flex: 1, padding: 20, backgroundColor: '#d8ebf7' },
   header: { fontSize: 24, marginBottom: 20, textAlign: 'center' },
-  task: { backgroundColor: '#fff', padding: 15, borderRadius: 5, marginBottom: 10 },
-  taskTitle: { fontWeight: 'bold' },
+  task: {
+    flexDirection: 'row',
+    backgroundColor: '#f0f4f8',
+    padding: 15,
+    borderRadius: 8,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#63b8ed',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  taskInfo: { flex: 1, marginRight: 10 },
+  taskTitle: { fontWeight: 'bold', fontSize: 16, marginBottom: 4 },
+  iconRow: { flexDirection: 'row' },
+  iconButton: { marginLeft: 15 },
   button: {
     backgroundColor: '#4295c8',
     paddingVertical: 12,
@@ -109,18 +103,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 10,
   },
-  buttonText: { 
-    color: 'white',
-    fontSize: 16,
-    fontWeight: '600' 
-  },
-  iconRow: {
-    flexDirection: 'row',
-    marginTop: 10,
-  },
-  iconButton: {
-    marginRight: 20,
-  },
+  buttonText: { color: 'white', fontSize: 16, fontWeight: '600' },
 });
 
 export default HomeScreen;
