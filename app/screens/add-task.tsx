@@ -70,8 +70,8 @@ const AddTaskScreen: React.FC<AddTaskScreenProps> = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: 'white' },
   input: { borderColor: 'gray', borderWidth: 1, marginBottom: 20, paddingLeft: 10, borderRadius: 5, fontSize: 16 },
-  descriptionInput: { height: 80, textAlignVertical: 'top' },
-  button: { backgroundColor: '#4295c8', borderRadius: 5, paddingVertical: 12, paddingHorizontal: 20, alignItems: 'center', marginTop: 10 },
+  descriptionInput: { height: 60, textAlignVertical: 'top' },
+  button: { backgroundColor: '#4295c8', borderRadius: 5, paddingVertical: 12, paddingHorizontal: 20, alignItems: 'center', marginTop: 5 },
   buttonText: { color: 'white', fontWeight: 'bold', fontSize: 16 },
 });
 
