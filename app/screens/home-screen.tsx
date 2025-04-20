@@ -42,57 +42,62 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Todos</Text>
-      <FlatList
-        data={todos}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          <View style={styles.task}>
-            <View style={styles.taskInfo}>
-              <Text style={styles.taskTitle}>{item.title}</Text>
-              <Text>{item.description}</Text>
-            </View>
+      <View style={styles.container}>
+        <Text style={styles.hero}>Available Tasks</Text>
+        <FlatList
+          data={todos}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <View style={styles.task}>
+              <View style={styles.taskInfo}>
+                <Text style={styles.taskTitle}>{item.title}</Text>
+                <Text>{item.description}</Text>
+              </View>
 
-            <View style={styles.iconRow}>
-              <TouchableOpacity onPress={() => handleEdit(item)} style={styles.iconButton}>
-                <MaterialIcons name="edit" size={24} color="#4295c8" />
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleDelete(item._id)} style={styles.iconButton}>
-                <MaterialIcons name="delete" size={24} color="#c44242" />
-              </TouchableOpacity>
+              <View style={styles.iconRow}>
+                <TouchableOpacity onPress={() => handleEdit(item)} style={styles.iconButton}>
+                  <MaterialIcons name="edit" size={24} color="#4295c8" />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => handleDelete(item._id)} style={styles.iconButton}>
+                  <MaterialIcons name="delete" size={24} color="#c44242" />
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
-        )}
-      />
+          )}
+        />
 
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => navigation.navigate('Add Task', {})}
-        activeOpacity={0.7}
-      >
-        <Text style={styles.buttonText}>Add Task</Text>
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Add Task', {})}
+          activeOpacity={0.7}
+        >
+          <Text style={styles.buttonText}>Add Task</Text>
+        </TouchableOpacity>
+      </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: '#d8ebf7' },
-  header: { fontSize: 24, marginBottom: 20, textAlign: 'center' },
+  hero: {     fontSize: 28,
+    fontWeight: 'bold',
+    marginTop: 60,
+    textAlign: 'center',
+    color: '#333', },
+
   task: {
     flexDirection: 'row',
     backgroundColor: '#f0f4f8',
-    padding: 15,
+    padding: 10,
     borderRadius: 8,
-    marginBottom: 10,
+    marginBottom: 5,
     borderWidth: 1,
     borderColor: '#63b8ed',
     alignItems: 'center',
     justifyContent: 'space-between',
   },
   taskInfo: { flex: 1, marginRight: 10 },
-  taskTitle: { fontWeight: 'bold', fontSize: 16, marginBottom: 4 },
+  taskTitle: { fontWeight: 'bold', fontSize: 14, marginBottom: 3 },
   iconRow: { flexDirection: 'row' },
   iconButton: { marginLeft: 15 },
   button: {

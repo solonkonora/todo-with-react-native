@@ -24,7 +24,7 @@ export default function Layout() {
           >
             Taskify with React Native
           </Text>
-        ),
+       ),
       }}
     />
   );

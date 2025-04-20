@@ -5,6 +5,7 @@ export type todoProps = {
 };
 
 export type RootStackParamList = {
+  Landing: undefined;
   Home: undefined;
   'Add Task': { todo?: todoProps };
 };
