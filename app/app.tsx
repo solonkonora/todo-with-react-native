@@ -3,7 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import HomeScreen from './screens/home-screen';
 import AddTaskScreen from './screens/add-task';
 
-import type { RootStackParamList, todoProps } from '../nav-types/types';
+import type { RootStackParamList} from '../nav-types/types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 

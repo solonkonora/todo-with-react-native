@@ -3,7 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, Platform } from 're
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-import { RootStackParamList, todoProps } from '../../nav-types/types'; // Adjust path
+import { RootStackParamList, todoProps } from '../../nav-types/types';
 
 type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
