@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, StyleSheet, Alert, TouchableOpacity, Text, Platform } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList, todoProps } from '../../nav-types/types'; // Adjust path
+import { RootStackParamList, todoProps } from '../../nav-types/types';
 
 type AddTaskScreenProps = NativeStackScreenProps<RootStackParamList, 'Add Task'>;
 

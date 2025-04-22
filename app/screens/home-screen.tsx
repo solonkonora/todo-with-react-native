@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Platform } from 'react-native';
+import { View, Image, Text, FlatList, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
@@ -42,7 +42,17 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
   };
 
   return (
-      <View style={styles.container}>
+    <View style={styles.container}>
+      <View style={styles.imageWrapper}>
+        <Image
+          source={require('../../assets/images/one.jpg')}
+          style={styles.image}
+          resizeMode="cover"
+        />
+      </View>
+
+      {/* Tasks and button take the other half */}
+      <View style={styles.contentWrapper}>
         <Text style={styles.hero}>Available Tasks</Text>
         <FlatList
           data={todos}
@@ -55,10 +65,16 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
               </View>
 
               <View style={styles.iconRow}>
-                <TouchableOpacity onPress={() => handleEdit(item)} style={styles.iconButton}>
+                <TouchableOpacity
+                  onPress={() => handleEdit(item)}
+                  style={styles.iconButton}
+                >
                   <MaterialIcons name="edit" size={24} color="#4295c8" />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => handleDelete(item._id)} style={styles.iconButton}>
+                <TouchableOpacity
+                  onPress={() => handleDelete(item._id)}
+                  style={styles.iconButton}
+                >
                   <MaterialIcons name="delete" size={24} color="#c44242" />
                 </TouchableOpacity>
               </View>
@@ -74,16 +90,38 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
           <Text style={styles.buttonText}>Add Task</Text>
         </TouchableOpacity>
       </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: '#d8ebf7' },
-  hero: {     fontSize: 28,
+  container: {
+    flex: 1,
+    backgroundColor: '#d8ebf7',
+  },
+
+  imageWrapper: {
+    flex: 0.4, // Half the screen height
+    width: '100%', // Full width
+  },
+  image: {
+    width: '100%', // Full width of container
+    height: '100%', // Full height of wrapper
+  },
+
+  contentWrapper: {
+    flex: 0.5, // half of the screen
+    paddingHorizontal: 20,
+    paddingTop: 10,
+  },
+
+  hero: {
+    fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 60,
+    marginBottom: 10,
     textAlign: 'center',
-    color: '#333', },
+    color: '#333',
+  },
 
   task: {
     flexDirection: 'row',
@@ -97,16 +135,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   taskInfo: { flex: 1, marginRight: 10 },
-  taskTitle: { fontWeight: 'bold', fontSize: 14, marginBottom: 3 },
+  taskTitle: { fontWeight: 'bold', fontSize: 14, marginBottom: 2 },
   iconRow: { flexDirection: 'row' },
   iconButton: { marginLeft: 15 },
   button: {
     backgroundColor: '#4295c8',
     paddingVertical: 12,
-    paddingHorizontal: 25,
-    borderRadius: 8,
+    // paddingHorizontal: 25,
+    borderRadius: 10,
     alignItems: 'center',
     marginTop: 10,
+    marginBottom: -12
   },
   buttonText: { color: 'white', fontSize: 16, fontWeight: '600' },
 });

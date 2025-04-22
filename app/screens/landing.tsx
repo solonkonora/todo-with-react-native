@@ -1,14 +1,14 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../nav-types/types'; // Adjust path accordingly
+import { RootStackParamList } from '../../nav-types/types';
 
-type LandingPageProps = NativeStackScreenProps<RootStackParamList, 'Landing'>;
+type LandingProps = NativeStackScreenProps<RootStackParamList, 'Landing'>;
 
-const LandingPage: React.FC<LandingPageProps> = ({ navigation }) => {
+const LandingPage: React.FC<LandingProps> = ({ navigation }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Your Every Day Tasks Board</Text>
+      <Text style={styles.header}>Welcome to Your Every Day Tasks Board</Text>
 
       <View style={styles.imageWrapper}>
         <Image
@@ -29,8 +29,6 @@ const LandingPage: React.FC<LandingPageProps> = ({ navigation }) => {
   );
 };
 
-export default LandingPage;
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -42,7 +40,7 @@ const styles = StyleSheet.create({
   header: {
     fontSize: 28,
     fontWeight: 'bold',
-    marginTop: 50,
+    marginTop: 20,
     textAlign: 'center',
     color: '#333',
   },
@@ -53,7 +51,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 320,
-    height: 210,
+    height: 260,
     borderRadius: 10,
   },
   button: {
@@ -61,7 +59,7 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 60,
     borderRadius: 30,
-    marginBottom: 40,
+    marginBottom: 30,
     alignSelf: 'stretch',
     marginHorizontal: 20,
   },
@@ -72,3 +70,5 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
 });
+
+export default LandingPage;
